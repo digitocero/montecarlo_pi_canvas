@@ -1,0 +1,57 @@
+<!--
+Monte carlo pi calculation
+with canvas visualization
+visible in any browser 
+with canvas support
+
+author: jesus mejuto
+-->
+<html>
+<head>
+<script type="application/javascript">
+    function draw(size,iterations) {
+        var canvas = document.getElementById("canvas");
+        canvas.setAttribute("width",size);
+        canvas.setAttribute("height",size);
+        var ctx = canvas.getContext("2d");
+
+        //draw rectangle
+        ctx.fillStyle = "rgb(200,0,0)";
+        ctx.fillRect(0, 0, size, size);
+
+        //draw circle
+        ctx.fillStyle = "rgb(0,0,0)";
+        ctx.beginPath();
+        var half_size= Math.floor(size/2);
+        ctx.arc(half_size, half_size, half_size, 0, Math.PI*2, true);
+        ctx.closePath();
+        ctx.fill();
+
+        //generate random points
+        ctx.fillStyle = "rgb(255,255,255)";
+        var count_inside= 0;
+        for(var i=0;i<iterations;i++) {
+            var rand1= Math.floor(Math.random()*size);
+            var rand2= Math.floor(Math.random()*size);
+            ctx.fillRect(rand1, rand2, 1, 1);
+
+            //is the point inside the circle? who knows...
+            var distance= Math.sqrt(Math.pow(rand1,2)+Math.pow(rand2,2));
+            if(distance <= half_size) {
+                count_inside++;
+            }
+        }
+
+        //approximate pi
+        var results= 4.0 * count_inside / iterations * 4;
+        //print results
+        document.getElementById("results").innerHTML= results;
+    }
+</script>
+</head>
+<body onload="draw(300,10000)">
+    <canvas id="canvas" width="300" height="300"></canvas>
+    <p id="results"></p>
+</body>
+</html>
+
